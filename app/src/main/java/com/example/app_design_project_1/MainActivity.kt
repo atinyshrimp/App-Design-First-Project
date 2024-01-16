@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -27,6 +28,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -55,6 +60,8 @@ class MainActivity : ComponentActivity() {
                         NavBar()
                         Spacer(modifier = Modifier.height(8.dp))
                         Greeting("")
+                        Spacer(modifier = Modifier.height(16.dp))
+                        NavPills()
                     }
                 }
             }
@@ -141,7 +148,6 @@ fun Greeting(name: String) {
     }
 }
 
-@Preview
 @Composable
 fun PlantCard() {
     val gradientBrush = Brush.linearGradient(
@@ -152,7 +158,11 @@ fun PlantCard() {
 
     Box {
         Row (modifier = Modifier
-            .shadow(elevation = 10.dp, spotColor = Color(0x26000000), ambientColor = Color(0x26000000))
+            .shadow(
+                elevation = 10.dp,
+                spotColor = Color(0x26000000),
+                ambientColor = Color(0x26000000)
+            )
             .width(160.dp)
             .height(242.dp)
             .background(color = Color(0xFFFFFFFF), shape = RoundedCornerShape(size = 18.dp))
@@ -198,6 +208,63 @@ fun PlantCard() {
             contentDescription = ""
         )
     }
+}
+
+@Composable
+fun NavPills() {
+    var selectedTab by remember { mutableIntStateOf(0) }
+
+    Box (modifier = Modifier
+        .width(350.dp)
+        .height(47.dp)
+        .background(color = Color(0xFFE6FFD6), shape = RoundedCornerShape(size = 28.dp)),
+        contentAlignment = Alignment.Center,
+        ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 18.dp),
+            horizontalArrangement = Arrangement.Absolute.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            NavItem("Houseplants", selectedTab == 0) { selectedTab = 0 }
+            NavItem("Evergreen trees", selectedTab == 1) { selectedTab = 1 }
+            NavItem("Palm Tree", selectedTab == 2) { selectedTab = 2 }
+        }
+    }
+
+}
+
+@Composable
+fun NavItem(title: String, selected: Boolean, onClick: () -> Unit) {
+    Box(
+        modifier = Modifier
+            .selectable(
+                selected = selected,
+                onClick = onClick
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+        if (selected) {
+            Box(modifier = Modifier
+                .shadow(elevation = (-50).dp, spotColor = Color(0x40000000), ambientColor = Color(0x40000000))
+                .width(112.dp)
+                .height(34.dp)
+                .background(color = Color(0xFFF2F6EE), shape = RoundedCornerShape(size = 26.dp)))
+        }
+        Text(
+            text = title,
+            fontFamily = lexend,
+            fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
+            color = Color(0xFF394929),
+        )
+    }
+}
+
+@Preview
+@Composable
+fun PreviewNavPills() {
+    NavPills()
 }
 
 /*
