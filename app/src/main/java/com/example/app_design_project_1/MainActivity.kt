@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -79,7 +80,16 @@ fun NavBar() {
             Box {
                 Image(painter = painterResource(id = R.drawable._6_notification),
                     contentDescription = "Home plant")
-                Icons.Filled.Info
+                Image(
+                    painter = painterResource(id = R.drawable.notification_circle),
+                    contentDescription = "notification_circle",
+                    contentScale = ContentScale.None,
+                    modifier = Modifier
+                        .padding(1.dp)
+                        .width(8.dp)
+                        .height(8.dp)
+                        .align(Alignment.TopEnd)
+                )
             }
 
             Spacer(modifier = Modifier.width(15.dp))
