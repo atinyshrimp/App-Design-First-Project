@@ -37,6 +37,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.app_design_project_1.ui.theme.App_Design_Project_1Theme
+import com.example.app_design_project_1.ui.theme.lexend
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,7 +49,7 @@ class MainActivity : ComponentActivity() {
                     Column {
                         NavBar()
                         Spacer(modifier = Modifier.height(8.dp))
-                        Greeting()
+                        Greeting("")
                     }
                 }
             }
@@ -91,15 +92,18 @@ fun NavBar() {
     }
 }
 
-@Preview
+
 @Composable
-fun Greeting() {
-    Column (horizontalAlignment = Alignment.Start) {
+fun Greeting(name: String) {
+    Column (horizontalAlignment = Alignment.Start,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 20.dp)) {
         Text(
-            text = "Hey Urvashi",
+            text = "Hey $name",
             style = TextStyle(
                 fontSize = 14.sp,
-                //fontFamily = FontFamily(Font(R.font.lexend)),
+                fontFamily = lexend,
                 fontWeight = FontWeight(500),
                 color = Color(0xFF91A37F),
                 textAlign = TextAlign.Start,
@@ -112,7 +116,7 @@ fun Greeting() {
             text = "Help Us To Save Our Mother Earth",
             style = TextStyle(
                 fontSize = 18.sp,
-                //fontFamily = FontFamily(Font(R.font.lexend)),
+                fontFamily = lexend,
                 fontWeight = FontWeight(600),
                 color = Color(0xFF394929),
                 textAlign = TextAlign.Start
@@ -121,5 +125,13 @@ fun Greeting() {
                 .width(307.dp)
                 .height(23.dp)
         )
+    }
+}
+
+@Preview
+@Composable
+fun GreetingsPreview(){
+    App_Design_Project_1Theme {
+        Greeting("Joyce")
     }
 }
