@@ -47,6 +47,7 @@ class MainActivity : ComponentActivity() {
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
                     Column {
                         NavBar()
+                        Spacer(modifier = Modifier.height(8.dp))
                         Greeting()
                     }
                 }
@@ -90,7 +91,7 @@ fun NavBar() {
     }
 }
 
-
+@Preview
 @Composable
 fun Greeting() {
     Column (horizontalAlignment = Alignment.Start) {
@@ -98,10 +99,10 @@ fun Greeting() {
             text = "Hey Urvashi",
             style = TextStyle(
                 fontSize = 14.sp,
-                //fontFamily = FontFamily(Font(R.font.font_lexend, FontWeight.Normal)),
+                //fontFamily = FontFamily(Font(R.font.lexend)),
                 fontWeight = FontWeight(500),
                 color = Color(0xFF91A37F),
-                textAlign = TextAlign.Center,
+                textAlign = TextAlign.Start,
             ),
             modifier = Modifier
                 .width(84.dp)
@@ -111,7 +112,7 @@ fun Greeting() {
             text = "Help Us To Save Our Mother Earth",
             style = TextStyle(
                 fontSize = 18.sp,
-                //fontFamily = FontFamily(Font(R.font.font_lexend)),
+                //fontFamily = FontFamily(Font(R.font.lexend)),
                 fontWeight = FontWeight(600),
                 color = Color(0xFF394929),
                 textAlign = TextAlign.Start
@@ -119,7 +120,6 @@ fun Greeting() {
             modifier = Modifier
                 .width(307.dp)
                 .height(23.dp)
-                .wrapContentWidth()
         )
     }
 }
