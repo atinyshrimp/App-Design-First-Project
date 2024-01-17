@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">App_Design_Project_1</string>
+    <string name="plant_1">Peperomia Houseplant</string>
+    <string name="plant_2">Crassula Houseplant</string>
 </resources>

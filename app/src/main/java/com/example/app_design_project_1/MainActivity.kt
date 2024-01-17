@@ -8,6 +8,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,7 +18,12 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyGridState
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -40,6 +46,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -62,6 +69,8 @@ class MainActivity : ComponentActivity() {
                         Greeting("")
                         Spacer(modifier = Modifier.height(16.dp))
                         NavPills()
+                        Spacer(modifier = Modifier.height(65.dp))
+                        PlantGridPreview()
                     }
                 }
             }
@@ -149,14 +158,14 @@ fun Greeting(name: String) {
 }
 
 @Composable
-fun PlantCard() {
+fun PlantCard(plant: Plant, imgModifier: Modifier) {
     val gradientBrush = Brush.linearGradient(
         colors = listOf(Color(0xFFD6ECCC), Color(0xFF9CED6B), Color(0xFF579133)),
         start = androidx.compose.ui.geometry.Offset(0f, 0f),
         end = androidx.compose.ui.geometry.Offset(0f, 75f)
     )
 
-    Box {
+    Box (contentAlignment = Alignment.Center) {
         Row (modifier = Modifier
             .shadow(
                 elevation = 10.dp,
@@ -170,7 +179,7 @@ fun PlantCard() {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween) {
             Text(
-                text = "Peperomia Houseplant",
+                text = stringResource(id = plant.stringResId),
                 style = TextStyle(
                     fontSize = 12.sp,
                     fontFamily = lexend,
@@ -200,12 +209,10 @@ fun PlantCard() {
 
         }
         Image(
-            modifier = Modifier
-                .width(164.99998.dp)
-                .height(225.89285.dp)
-                .offset(y = (-42).dp),
-            painter = painterResource(id = R.drawable.houseplant_peperomia_in_white_flowerpot),
-            contentDescription = ""
+            modifier = imgModifier,
+            painter = painterResource(id = plant.imageResId),
+            contentDescription = "",
+            contentScale = ContentScale.Crop
         )
     }
 }
@@ -247,7 +254,11 @@ fun NavItem(title: String, selected: Boolean, onClick: () -> Unit) {
     ) {
         if (selected) {
             Box(modifier = Modifier
-                .shadow(elevation = (-50).dp, spotColor = Color(0x40000000), ambientColor = Color(0x40000000))
+                .shadow(
+                    elevation = (-50).dp,
+                    spotColor = Color(0x40000000),
+                    ambientColor = Color(0x40000000)
+                )
                 .width(112.dp)
                 .height(34.dp)
                 .background(color = Color(0xFFF2F6EE), shape = RoundedCornerShape(size = 26.dp)))
@@ -261,10 +272,62 @@ fun NavItem(title: String, selected: Boolean, onClick: () -> Unit) {
     }
 }
 
-@Preview
+//@Preview
 @Composable
 fun PreviewNavPills() {
     NavPills()
+}
+
+@Composable
+fun PlantGrid(listOfPlants: List<Plant>) {
+  LazyVerticalGrid(
+      columns = GridCells.Fixed(2),
+      verticalArrangement = Arrangement.spacedBy(56.dp),
+      modifier = Modifier
+          .fillMaxWidth()
+          .wrapContentHeight()) {
+      items(listOfPlants){ plant ->
+          PlantCard(plant, plant.imageModifier)
+      }
+  }
+}
+
+@Preview
+@Composable
+fun PlantGridPreview() {
+    App_Design_Project_1Theme {
+        PlantGrid(listOfPlants = plantList())
+    }
+}
+
+fun plantList(): List<Plant> {
+    return listOf(
+        Plant(R.drawable.houseplant_peperomia_in_white_flowerpot,
+            R.string.plant_1,
+            Modifier
+                .width(164.99998.dp)
+                .height(230.89285.dp)
+                .offset(y = (-60).dp)),
+        Plant(R.drawable.houseplant_crassula_ovata_jade_plant_money_tree,
+            R.string.plant_2,
+            Modifier
+                .width(181.14783.dp)
+                .height(248.dp)
+                .offset(y = (-68).dp)),
+        Plant(R.drawable.houseplant_asplenium_nidus_in_white_pot,
+            R.string.plant_1,
+            Modifier
+                .width(171.00002.dp)
+                .height(234.10715.dp)
+                .offset(y = (-55).dp)),
+        Plant(R.drawable.houseplant_crassula_grey_pot,
+            R.string.plant_2,
+            Modifier
+                //.shadow(elevation = 45.60000228881836.dp, spotColor = Color(0x40FFB39B), ambientColor = Color(0x40FFB39B))
+                .width(228.dp)
+                .height(250.dp)
+                .offset(y = (-45).dp))
+    )
 }
 
 /*
