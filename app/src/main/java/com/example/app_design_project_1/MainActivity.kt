@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
@@ -157,7 +158,7 @@ fun Greeting(name: String) {
 }
 
 @Composable
-fun PlantCard(plant: Plant, imgModifier: Modifier) {
+fun PlantCard(plant: Plant, modifier: Modifier) {
     val gradientBrush = Brush.linearGradient(
         colors = listOf(Color(0xFFD6ECCC), Color(0xFF9CED6B), Color(0xFF579133)),
         start = androidx.compose.ui.geometry.Offset(0f, 0f),
@@ -165,10 +166,11 @@ fun PlantCard(plant: Plant, imgModifier: Modifier) {
     )
 
     Box (contentAlignment = Alignment.Center,
-        modifier = Modifier.wrapContentHeight()) {
+        modifier = Modifier.requiredHeight(350.dp)
+    ) {
         Row (modifier = Modifier
             .shadow(
-                elevation = 10.dp,
+                elevation = 100.dp,
                 spotColor = Color(0x26000000),
                 ambientColor = Color(0x26000000)
             )
@@ -209,7 +211,7 @@ fun PlantCard(plant: Plant, imgModifier: Modifier) {
 
         }
         Image(
-            modifier = imgModifier,
+            modifier = modifier,
             painter = painterResource(id = plant.imageResId),
             contentDescription = "",
             contentScale = ContentScale.Crop
@@ -256,7 +258,7 @@ fun NavItem(title: String, selected: Boolean, onClick: () -> Unit) {
         if (selected) {
             Box(modifier = Modifier
                 .shadow(
-                    elevation = (-50).dp,
+                    elevation = 3.dp,
                     spotColor = Color(0x40000000),
                     ambientColor = Color(0x40000000)
                 )
@@ -273,27 +275,23 @@ fun NavItem(title: String, selected: Boolean, onClick: () -> Unit) {
     }
 }
 
-//@Preview
-@Composable
-fun PreviewNavPills() {
-    NavPills()
-}
-
 @Composable
 fun PlantGrid(listOfPlants: List<Plant>) {
     Box(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(top = 80.dp) // Adjust the value based on your desired spacing
+            .wrapContentHeight()
+            .offset(y = (-40).dp),
+        contentAlignment = Alignment.Center
     ) {
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
-            verticalArrangement = Arrangement.spacedBy(56.dp),
+            verticalArrangement = Arrangement.spacedBy((-50).dp),
+            horizontalArrangement = Arrangement.spacedBy((-10).dp),
             modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentHeight()) {
             items(listOfPlants){ plant ->
-                PlantCard(plant, plant.imageModifier)
+                PlantCard(plant, plant.modifier)
             }
         }
     }
@@ -321,7 +319,7 @@ fun plantList(): List<Plant> {
             Modifier
                 .width(181.14783.dp)
                 .height(248.dp)
-                .offset(y = (-60).dp)),
+                .offset(y = (-80).dp)),
         Plant(R.drawable.houseplant_asplenium_nidus_in_white_pot,
             R.string.plant_1,
             Modifier
