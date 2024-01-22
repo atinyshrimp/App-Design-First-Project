@@ -7,5 +7,6 @@ import androidx.compose.ui.Modifier
 data class Plant(
     @DrawableRes val imageResId: Int,
     @StringRes val stringResId: Int,
-    val modifier: Modifier
+    val description: String,
+    val modifier: Modifier,
 )
