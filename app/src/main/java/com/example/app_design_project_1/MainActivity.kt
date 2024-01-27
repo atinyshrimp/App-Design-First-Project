@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.absolutePadding
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -42,6 +41,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -56,7 +56,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -72,22 +71,26 @@ class MainActivity : ComponentActivity() {
         setContent {
             App_Design_Project_1Theme {
                 // A surface container using the 'background' color from the theme
-                Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
+                Surface(modifier = Modifier.fillMaxSize(), color = Color(0xFFFCFCFF)) {
+
+                    var selectedCategory by remember { mutableStateOf("Houseplants") }
 
                     val navController = rememberNavController()
                     NavHost(navController = navController, startDestination = "main")
                     {
-                        composable(route = "main")
-                        {
+                        composable(route = "main") {
+
                             Column {
                                 Spacer(modifier = Modifier.height(10.dp))
                                 NavBar()
                                 Spacer(modifier = Modifier.height(8.dp))
                                 Greeting("Urvashi")
                                 Spacer(modifier = Modifier.height(16.dp))
-                                NavPills()
+                                NavPills(onCategorySelected = { category ->
+                                    selectedCategory = category
+                                })
                                 Spacer(modifier = Modifier.height(65.dp))
-                                PlantGrid(plantList(), navController)
+                                PlantGrid(getPlantsByCategory(selectedCategory), navController)
                             }
                         }
 
@@ -221,7 +224,7 @@ fun NavItem(title: String, selected: Boolean, onClick: () -> Unit) {
 
 
 @Composable
-fun NavPills() {
+fun NavPills(onCategorySelected: (String) -> Unit) {
     var selectedTab by remember { mutableIntStateOf(0) }
 
     Box (modifier = Modifier
@@ -238,9 +241,18 @@ fun NavPills() {
             horizontalArrangement = Arrangement.Absolute.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            NavItem("Houseplants", selectedTab == 0) { selectedTab = 0 }
-            NavItem("Evergreen trees", selectedTab == 1) { selectedTab = 1 }
-            NavItem("Palm Tree", selectedTab == 2) { selectedTab = 2 }
+            NavItem(stringResource(id = R.string.category_1), selectedTab == 0) {
+                selectedTab = 0
+                onCategorySelected("Houseplants")
+            }
+            NavItem(stringResource(id = R.string.category_2), selectedTab == 1) {
+                selectedTab = 1
+                onCategorySelected("Evergreen trees")
+            }
+            NavItem(stringResource(id = R.string.category_3), selectedTab == 2) {
+                selectedTab = 2
+                onCategorySelected("Palm Tree")
+            }
         }
     }
 
@@ -339,10 +351,13 @@ fun PlantGrid(listOfPlants: List<Plant>, navController: NavHostController) {
 
 }
 
+@Composable
 fun plantList(): List<Plant> {
     return listOf(
         Plant(R.drawable.houseplant_peperomia_in_white_flowerpot,
             R.string.plant_1,
+            "",
+            stringResource(R.string.category_1),
             description = "Peperomia, a genus of small, compact houseplants, is cherished for its" +
                     " diverse foliage and easy maintenance. With a wide variety of species," +
                     " Peperomias showcase unique leaf shapes, colors, and patterns, making them a" +
@@ -359,6 +374,8 @@ fun plantList(): List<Plant> {
                 .offset(y = (-60).dp)),
         Plant(R.drawable.houseplant_crassula_ovata_jade_plant_money_tree,
             R.string.plant_2,
+            "",
+            stringResource(R.string.category_1),
             description = "Crassula, commonly known as the jade plant or money plant, is a popular " +
                     "succulent houseplant celebrated for its thick, glossy leaves and ease of care." +
                     "\nCharacterized by its resilience, the plant thrives in bright, indirect light" +
@@ -373,6 +390,8 @@ fun plantList(): List<Plant> {
                 .offset(y = (-80).dp)),
         Plant(R.drawable.houseplant_asplenium_nidus_in_white_pot,
             R.string.plant_1,
+            "",
+            stringResource(R.string.category_1),
             description = "Asplenium nidus, commonly known as the bird's nest fern, is a striking" +
                     " houseplant admired for its lush, arching fronds that resemble a bird's nest.\n" +
                     "With its tropical origins, this fern thrives in indirect light and " +
@@ -385,6 +404,8 @@ fun plantList(): List<Plant> {
                 .offset(y = (-55).dp)),
         Plant(R.drawable.houseplant_crassula_grey_pot,
             R.string.plant_2,
+            "",
+            stringResource(R.string.category_1),
             description = "Crassula, commonly known as the jade plant or money plant, is a popular " +
                     "succulent houseplant celebrated for its thick, glossy leaves and ease of care." +
                     "\nCharacterized by its resilience, the plant thrives in bright, indirect light" +
@@ -394,11 +415,70 @@ fun plantList(): List<Plant> {
                     " distinctive, tree-like appearance, making them a favored choice for indoor" +
                     " gardens and decorative settings.",
             Modifier
-                //.shadow(elevation = 45.60000228881836.dp, spotColor = Color(0x40FFB39B), ambientColor = Color(0x40FFB39B))
                 .width(228.dp)
                 .height(250.dp)
-                .offset(y = (-45).dp))
+                .offset(y = (-45).dp)),
+        Plant(R.drawable.cypress_tree,
+            R.string.plant_3,
+            stringResource(R.string.science_name_3),
+            stringResource(R.string.category_2),
+            description = "Cypress trees feature scale-like leaves and a slender, columnar form. " +
+                    "They are commonly used as ornamental trees and are associated with landscapes" +
+                    " in various regions. Some varieties, like the Leyland cypress, are popular for" +
+                    " creating privacy hedges.",
+            Modifier
+                .width(228.dp)
+                .height(250.dp)
+                .offset(y = (-45).dp)),
+        Plant(R.drawable.dypsis_lutescens,
+            R.string.plant_5,
+            stringResource(R.string.science_name_5),
+            stringResource(R.string.category_3),
+            description = "Known for its elegant, arching fronds with feather-like leaflets, the" +
+                    " areca palm is a popular choice for indoor decoration. It adds a tropical" +
+                    " touch to spaces and is valued for its air-purifying qualities.",
+            Modifier
+                .width(228.dp)
+                .height(250.dp)
+                .offset(y = (-45).dp)),
+        Plant(R.drawable.cocos_nucifera,
+            R.string.plant_4,
+            stringResource(R.string.science_name_4),
+            stringResource(R.string.category_3),
+            description = "The coconut palm is celebrated for its tall, slender trunk, and large," +
+                    " feather-like fronds. It is famous for bearing coconuts, which have culinary" +
+                    " and commercial significance. Coconut palms thrive in tropical climates.",
+            Modifier
+                .width(228.dp)
+                .height(250.dp)
+                .offset(y = (-45).dp)),
+        Plant(R.drawable.cycus_revoluta,
+            R.string.plant_6,
+            stringResource(R.string.science_name_6),
+            stringResource(R.string.category_3),
+            description = "Cycas revoluta, commonly known as the Sago Palm, is a distinctive cycad" +
+                    " that, despite its name, is not a true palm but rather a primitive, " +
+                    "cone-bearing plant. Renowned for its symmetrical, feather-like fronds and " +
+                    "stout, cylindrical trunk, the Sago Palm lends a tropical and prehistoric " +
+                    "charm to landscapes. This slow-growing plant is adaptable to various light " +
+                    "conditions, thriving in both indoor and outdoor environments. The glossy, " +
+                    "dark green fronds emerge in a circular pattern, creating a crown of foliage." +
+                    " The Sago Palm is known for its resilience and longevity, making it a popular" +
+                    " choice for ornamental gardens, containers, and as a focal point in" +
+                    " landscaping designs. It is important to note that all parts of the Sago Palm" +
+                    " are toxic if ingested, so care should be taken in households with pets or" +
+                    " small children.",
+            Modifier
+                .width(200.dp)
+                .height(210.dp)
+                .offset(y = (-55).dp))
+
     )
+}
+
+@Composable
+private fun getPlantsByCategory(category: String): List<Plant> {
+    return plantList().filter { it.category == category }
 }
 
 // New page for each plant
@@ -468,6 +548,20 @@ fun PlantDetailPage(plant: Plant, navController: NavHostController) {
                     fontWeight = FontWeight(600),
                     color = Color(0xFF394929),
                     textAlign = TextAlign.Start
+                )
+            )
+
+            Spacer(Modifier.height(5.dp))
+
+            Text(
+                text = if (plant.scientificNameId != "") "${plant.scientificNameId} ● ${plant.category}"
+                else plant.category,
+                style = TextStyle(
+                    fontSize = 16.sp,
+                    fontFamily = lexend,
+                    fontWeight = FontWeight(400),
+                    color = Color(0xFF91A37F),
+                    textAlign = TextAlign.Start,
                 )
             )
 

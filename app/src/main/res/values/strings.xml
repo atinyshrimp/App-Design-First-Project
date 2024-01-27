@@ -1,5 +1,16 @@
 <resources>
     <string name="app_name">App_Design_Project_1</string>
+    <string name="category_1">Houseplants</string>
+    <string name="category_2">Evergreen trees</string>
+    <string name="category_3">Palm Tree</string>
     <string name="plant_1">Peperomia Houseplant</string>
     <string name="plant_2">Crassula Houseplant</string>
+    <string name="plant_3">Cypress Tree</string>
+    <string name="science_name_3">Cupressus spp.</string>
+    <string name="plant_4">Coconut Palm</string>
+    <string name="science_name_4">Cocos nucifera</string>
+    <string name="plant_5">Areca Palm</string>
+    <string name="science_name_5">Dypsis lutescens</string>
+    <string name="plant_6">Sago Palm</string>
+    <string name="science_name_6">Cycus Revoluta</string>
 </resources>
