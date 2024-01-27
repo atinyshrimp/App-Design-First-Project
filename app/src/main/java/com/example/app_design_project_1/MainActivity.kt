@@ -27,9 +27,11 @@ import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.ArrowForward
@@ -92,7 +94,8 @@ class MainActivity : ComponentActivity() {
                         composable(route = "plantDetail/{plantId}") { backStackEntry ->
                             // Extract plantId from the route
                             val plantId = backStackEntry.arguments?.getString("plantId")
-                            val selectedPlant = plantList().find { it.stringResId == plantId?.toInt() }
+                            val selectedPlant = plantList().find { it.imageResId == plantId?.toInt() }
+
                             // Show detailed information about the selected plant
                             selectedPlant?.let { plant ->
                                 PlantDetailPage(plant, navController)
@@ -247,7 +250,7 @@ fun NavPills() {
 // Plants
 
 @Composable
-fun PlantCard(plant: Plant, modifier: Modifier) {
+fun PlantCard(plant: Plant, modifier: Modifier, navController: NavHostController) {
     val gradientBrush = Brush.linearGradient(
         colors = listOf(Color(0xFFD6ECCC), Color(0xFF9CED6B), Color(0xFF579133)),
         start = androidx.compose.ui.geometry.Offset(0f, 0f),
@@ -255,7 +258,12 @@ fun PlantCard(plant: Plant, modifier: Modifier) {
     )
 
     Box (contentAlignment = Alignment.Center,
-        modifier = Modifier.requiredHeight(350.dp)
+        modifier = Modifier
+            .requiredHeight(350.dp)
+            .clickable {
+                // Navigate to the plant detail page when the button is clicked
+                navController.navigate(route = "plantDetail/${plant.imageResId}")
+            }
     ) {
         Row (modifier = Modifier
             .shadow(
@@ -324,9 +332,7 @@ fun PlantGrid(listOfPlants: List<Plant>, navController: NavHostController) {
                 .fillMaxWidth()
                 .wrapContentHeight()) {
             items(listOfPlants){ plant ->
-                PlantCard(plant, plant.modifier)
-                // Navigate to the plant detail page when the button is clicked
-                navController.navigate(route = "plantDetail/${plant.stringResId}")
+                PlantCard(plant, plant.modifier, navController)
             }
         }
     }
@@ -398,19 +404,18 @@ fun plantList(): List<Plant> {
 // New page for each plant
 @Composable
 fun PlantDetailPage(plant: Plant, navController: NavHostController) {
-    // Your detailed plant information UI goes here
-    // You can use the `plant` parameter to display specific information
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp)
-            .background(color = Color(0xFFFCFCFF)),
-        verticalArrangement = Arrangement.Center,
+            .background(color = Color(0xFFFCFCFF))
+            .verticalScroll(rememberScrollState()),
+        verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Box (modifier = Modifier
-            .absolutePadding(top = 0.dp)
-            .fillMaxWidth()){
+            .fillMaxWidth()
+            .height(350.dp),
+            contentAlignment = Alignment.TopCenter){
 
             // Back button
             Box(
@@ -433,14 +438,15 @@ fun PlantDetailPage(plant: Plant, navController: NavHostController) {
             // Plant image
             Image(
                 modifier = Modifier
-                    .align(Alignment.Center)
-                    .size(311.dp)
-                    .offset(y = (-80).dp),
+                    .fillMaxSize()
+                    .align(Alignment.Center),
                 painter = painterResource(id = plant.imageResId),
                 contentDescription = "",
                 contentScale = ContentScale.Fit
             )
         }
+
+        Spacer(Modifier.height(45.dp))
 
         // Plant details
         Column(
@@ -452,10 +458,6 @@ fun PlantDetailPage(plant: Plant, navController: NavHostController) {
                 )
                 .fillMaxWidth()
                 .fillMaxHeight()
-                .background(
-                    color = Color(0xFFFFFFFF),
-                    shape = RoundedCornerShape(size = 14.dp)
-                )
                 .padding(vertical = 15.dp, horizontal = 20.dp)
         ) {
             Text(
@@ -469,7 +471,7 @@ fun PlantDetailPage(plant: Plant, navController: NavHostController) {
                 )
             )
 
-            Spacer(Modifier.height(45.dp))
+            Spacer(Modifier.height(35.dp))
 
             Text(
                 text = plant.description,
