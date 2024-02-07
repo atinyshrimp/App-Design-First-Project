@@ -4,7 +4,7 @@ A project done as a first project for our 4th year *'Application Design'* course
 We were given the choice between five different designs, and the goal of the project is to replicate them either in **iOS** or **Android**.
 
 ## Chosen Design
-I chose to work on the fifth design, as it looked not too complicated to replicate, but not too simple as well. I could already notice the grid of elements displaying the plants, and I knew that it would be somewhat of a "challenge" to work on.
+I chose to work on the fifth design (see the reference below), as it looked not too complicated to replicate, but not too simple as well. I could already notice the grid of elements displaying the plants, and I knew that it would be somewhat of a "challenge" to work on.
 
 ![ref_design](media/design_5.png)
 
@@ -33,7 +33,7 @@ The reason why I chose **Android** is because I do not have a Mac to work on, so
   - I had correctly imported the fonts, thanks to some YouTube videos, but the software hadn't taken these modifications into account before I had ***cleaned & rebuilt*** the project.
 - Overflow of the pictures within Box elements
   - In the reference design, we can see that the leaves of the plants are expanding outside of the box, so I knew that I had to use the ***Box*** layout container
-  - Unfortunately, the ***LazyVerticalGrid*** I used was inside another component, so the because were getting cut off by its bounds.
-  - Using an ***offset*** modifier on the different pictures turned out to resolve this issue.
+  - Unfortunately, the ***LazyVerticalGrid*** I used was inside another component, so the leaves were getting cut off by its bounds.
+  - Using an ***offset*** modifier on the different pictures turned out to solve this issue.
 - Navigating to other pages with *NavHost*
   - Turned out to be a careless mistake, I had done everything correctly, but the app kept navigating to the other screen because I hadn't made the corresponding buttons ***clickable***.
